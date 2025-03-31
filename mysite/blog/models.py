@@ -3,6 +3,17 @@ from django.db import models
 from django.utils import timezone
 
 
+class PublishedManager(models.Manager):
+    """Модельный менеджер, для того что бы упростить извлечение
+    объектов из БД по аолю статуса Опубликованые."""
+
+    def get_queryset(self):
+        """Получаем кверисет подмодели Статус модели Пост."""
+        return (
+            super().get_queryset().filter(status=Post.Status.PUBLISHED)
+        )
+
+
 class Post(models.Model):
     """Модель поста с характеристиками:
     Название, слаг поста, тело поста(текст)."""
@@ -28,6 +39,8 @@ class Post(models.Model):
         choices=Status.choices,
         default=Status.DRAFT
     )
+    objects = models.Manager() # Менеджер применяемы по умолчанию
+    published = PublishedManager() # Конкректно прикладной менеджер
 
     class Meta:
         ordering = ['-pub_date']
