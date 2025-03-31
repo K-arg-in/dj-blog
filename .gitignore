@@ -4,3 +4,5 @@ venv/
 .cfg
 .venv
 env/
+migrations/
+__pycache__/
