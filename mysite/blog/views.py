@@ -1,20 +1,19 @@
-from django.core.paginator import Paginator
+from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, render
 
 
 from .models import Post
 
 
-def post_list(request):
-    """Отображение информации о посте."""
+class PostListView(ListView):
+    """Представление на основе класса ListView
+    для отображения всех постов по параметрам."""
 
-    post_list = Post.published.all() # Получаем все опубликованные объекты.
-    paginator = Paginator(post_list, 3) # Пагинатор отражающий по 3 поста на странице
-    page_number = request.GET.get('page', 1) # Извлекаем параметр страницы page
-    posts = paginator.page(page_number) # Получаем объекты желаемой страницы
-    context = {'posts': posts}
-    # Закидываем в отображение резульатата реквест, шаблон и контекст
-    return render(request, 'blog/post/list.html', context)
+    queryset = Post.published.all()
+    paginate_by = 3
+    context_object_name = 'posts'
+    template_name = 'blog/post/list.html'
+
 
 def post_detail(request, year, month, day, post):
     """Функция детального тображения одного опубликованного поста."""

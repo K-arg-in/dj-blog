@@ -1,11 +1,11 @@
 from django.urls import path
 
-from .views import post_detail, post_list
+from .views import post_detail, PostListView
 
 app_name = 'blog'
 
 urlpatterns = [
-    path('', post_list, name='post_list'),
+    path('', PostListView.as_view(), name='post_list'),
     path(
         # Форматируем урлы, что бы каждый пост имел индидуальную ссылку
         # в виде параметров: год\месяц\день\слаг-поста
