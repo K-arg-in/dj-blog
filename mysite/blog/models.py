@@ -1,5 +1,6 @@
 from django.conf import settings
 from django.db import models
+from django.urls import reverse
 from django.utils import timezone
 
 
@@ -24,7 +25,10 @@ class Post(models.Model):
         PUBLISHED = 'PB', 'Published'
 
     title = models.CharField(max_length=256,)
-    slug = models.SlugField(max_length=256,)
+    slug = models.SlugField(
+        max_length=256,
+        unique_for_date='pub_date'
+    )
     author = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
@@ -53,3 +57,17 @@ class Post(models.Model):
 
     def __str__(self):
         return self.title
+
+    def get_absolute_url(self):
+        """Метод отрисовывающий детальной отображение поста
+        по параметрам:
+          - год, месяц, день и слаг-поста."""
+        return reverse(
+            'blog:post_detail',
+            args=[
+                self.pub_date.year,
+                self.pub_date.month,
+                self.pub_date.day,
+                self.slug
+            ]
+        )
