@@ -8,7 +8,10 @@ from .models import Post
 def post_list(request):
     """Отображение информации о посте."""
 
-    posts = Post.published.all() # Получаем все опубликованные объекты.
+    post_list = Post.published.all() # Получаем все опубликованные объекты.
+    paginator = Paginator(post_list, 3) # Пагинатор отражающий по 3 поста на странице
+    page_number = request.GET.get('page', 1) # Извлекаем параметр страницы page
+    posts = paginator.page(page_number) # Получаем объекты желаемой страницы
     context = {'posts': posts}
     # Закидываем в отображение резульатата реквест, шаблон и контекст
     return render(request, 'blog/post/list.html', context)
