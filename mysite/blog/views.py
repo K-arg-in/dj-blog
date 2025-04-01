@@ -2,6 +2,7 @@ from django.views.generic import ListView
 from django.shortcuts import get_object_or_404, render
 
 
+from .forms import EmailPostForm
 from .models import Post
 
 
@@ -30,3 +31,30 @@ def post_detail(request, year, month, day, post):
     )
     context = {'post': post}
     return render(request, 'blog/post/detail.html', context)
+
+def post_share(request, post_id):
+    """Функция позволяющая поделиться постом с другим человеком."""
+
+    post = get_object_or_404(
+        Post,
+        id=post_id,
+        status=Post.Status.PUBLISHED
+    )
+
+    if request.method == 'POST':
+        # Форма была передана обработку
+        form = EmailPostForm(request.POST)
+        if form.is_valid():
+            # Валидация пройдена
+            cd = form.cleaned_data
+            # отправить электронное письмо
+    else:
+        form = EmailPostForm()
+    return render(
+        request,
+        'blog/post/share.html',
+        {
+            'post': post,
+            'form': form
+        }
+    )
