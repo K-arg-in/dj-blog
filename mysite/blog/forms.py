@@ -16,7 +16,7 @@ class EmailPostForm(forms.Form):
     )
 
 
-class CommentForm(forms.Form):
+class CommentForm(forms.ModelForm):
     """Форма реализующая отображения комментария
     с полями:
     названия, текста, почты."""
