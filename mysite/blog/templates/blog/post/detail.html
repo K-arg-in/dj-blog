@@ -8,4 +8,14 @@
     Опубликовано {{ post.pub_date }} автором {{ post.author }}
   </p>
   {{ post.body|linebreaks }}
+  <p>
+    <a href="{% url 'blog:post_share' post.id %}">
+      Поделиться постом
+    </a>
+  </p>
+  {% with comments.count as total_comments %}
+    <h2>
+      {{ total_comments }} комментарий {{ total_comments|pluralize }}
+    </h2>
+  {% endwith %}
 {% endblock %}
